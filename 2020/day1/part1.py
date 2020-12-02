@@ -11,7 +11,7 @@ length = len(numbers)
 count = 0
 start = timer()
 for i in range(length):
-	for j in range(1, length):
+	for j in range(i + 1, length):
 		if i == j:
 			continue
 
@@ -21,6 +21,8 @@ for i in range(length):
 		b = numbers[j]
 		if a + b == 2020:
 			print("%d iterations in %fms" % (count, (timer() - start) * 1000))
-			print("O(%d^2) = %d" % (length, length * length))
 			print("\n%d * %d = %d" % (a,b,a*b))
-			exit(0)
+
+print("\nworst case: %d iterations" % count)
+
+# 1069 * 951 = 1016619
