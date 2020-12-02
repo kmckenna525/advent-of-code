@@ -1,3 +1,5 @@
+from timeit import default_timer as timer
+
 file = open('input.txt')
 
 numbers = []
@@ -7,6 +9,7 @@ for line in file.readlines():
 length = len(numbers)
 
 count = 0
+start = timer()
 for i in range(length):
 	for j in range(1, length):
 		if i == j:
@@ -22,6 +25,7 @@ for i in range(length):
 			b = numbers[j]
 			c = numbers[k]
 			if a + b + c == 2020:
-				print("%d * %d * %d = %d" % (a,b,c,a*b*c))
-				print("%d iterations; O(%d^3) = %d" % (count, length, length * length * length))
+				print("%d iterations in %fms" % (count, (timer() - start) * 1000))
+				print("O(%d^3) = %d" % (length, length * length * length))
+				print("\n%d * %d * %d = %d" % (a,b,c,a*b*c))
 				exit(0)
