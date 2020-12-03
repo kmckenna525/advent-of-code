@@ -4,7 +4,7 @@ Just bulldozed through
 - minor optimization by starting second (and then third) loops at 1 (and 2)
 - minor optimization by exiting early
 
-General Big O estimate
+General Time Estimate
 - Part 1: (O(n^2) = 40,000)
 - Part 2: (O(n^3) = 8,000,000)
 
