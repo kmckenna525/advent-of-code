@@ -10,10 +10,12 @@ dir=$year/day$day
 
 if [ -d $dir ]; then
 	echo "$dir already exists"
-	exit 0
+else
+	cp -r template $dir
+	sed -i "" "s/# Day/# $year Day $day/" $dir/notes.md
+
+	echo "Created $dir"
 fi
 
-cp -r template $dir
-sed -i "" "s/# Day/# $year Day $day/" $dir/notes.md
+echo "cd $dir"
 
-echo "Created $dir"
