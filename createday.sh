@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ -z $1 ]; then
+	echo "Provide day or year and day as parameters"
+	exit 1
+fi
+
 year=$1
 day=$2
 if [ -z $2 ]; then
