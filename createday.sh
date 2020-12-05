@@ -4,6 +4,16 @@ if [ -z $1 ]; then
 	exit 1
 fi
 
+re='^[0-9]+$'
+if ! [[ $1 =~ $re ]] ; then
+   echo "error: $1 should be numeric"
+   exit 1
+fi
+if ! [ -z $2 ] && ! [[ $2 =~ $re ]] ; then
+   echo "error: $2 should be numeric"
+   exit 1
+fi
+
 year=$1
 day=$2
 if [ -z $2 ]; then

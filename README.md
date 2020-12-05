@@ -1,5 +1,8 @@
 # My Advent of Code Solution Tools
 
+## Handy Links for References
+Regex Checker: https://pythex.org/
+
 ## Scripts
 
 ### Create New Day
