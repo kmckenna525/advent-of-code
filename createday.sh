@@ -21,6 +21,11 @@ if [ -z $2 ]; then
 	day=$1
 fi
 
+if [ $day -gt 25 ]; then
+   echo "error: day should be max 25"
+   exit 1
+fi
+
 dir=$year/day$day
 
 if [ -d $dir ]; then
