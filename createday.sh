@@ -26,19 +26,15 @@ if [ $day -gt 25 ]; then
    exit 1
 fi
 
-if [ ${#day} -eq 1 ]; then
-	day="0$day"
-fi
-
 dir=$year/day$day
+if [ ${#day} -eq 1 ]; then
+	dir=$year/day0$day
+fi
 
 if [ -d $dir ]; then
 	echo "$dir already exists"
 else
-	cp -r template $dir
-	sed -i "" "s/# Day/# $year Day $day/" $dir/notes.md
-
-	echo "Created $dir"
+	mkdir -p $dir && cp -r template/* $dir && sed -i "" "s/# Day/# $year Day $day/" $dir/README.md && echo "Created $dir"
 fi
 
 echo "cd $dir"
