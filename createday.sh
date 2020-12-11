@@ -26,6 +26,10 @@ if [ $day -gt 25 ]; then
    exit 1
 fi
 
+if [ ${#day} -eq 1 ]; then
+	day="0$day"
+fi
+
 dir=$year/day$day
 
 if [ -d $dir ]; then
