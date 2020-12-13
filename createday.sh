@@ -37,5 +37,6 @@ else
 	mkdir -p $dir && cp -r template/* $dir && sed -i "" "s/# Day/# $year Day $day/" $dir/README.md && echo "Created $dir"
 fi
 
+echo "cd $dir" | pbcopy
 echo "cd $dir"
 

@@ -1,6 +1,20 @@
 from timeit import default_timer as timer
 import re
 
+class Node:
+	def __init__(self, val):
+		self.val = val
+		self.children = set()
+
+	def __str__(self):
+		return  "%d" % (self.val)
+
+	def __repr__(self):
+		return  "%d" % (self.val)
+
+	def connect(self, node):
+		self.children.add(node)
+
 start = timer()
 file = open('input.txt')
 
