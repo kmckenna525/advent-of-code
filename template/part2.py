@@ -10,10 +10,7 @@ class Node:
 		return  "%d" % (self.val)
 
 	def __repr__(self):
-		return  "%d" % (self.val)
-
-	def connect(self, node):
-		self.children.add(node)
+		return str(self.val)
 
 start = timer()
 file = open('input.txt')
