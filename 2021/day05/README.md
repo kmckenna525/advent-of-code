@@ -14,4 +14,15 @@ Benchmarks
 - Part 2: **14948.225975ms**
 
 
+Actually - minor optimization to just make the points sets a member variable instead of recalculating on every intersection check. 
+This is a major improvement
+
+General Time Estimate
+- Part 1: θ(n^2) 
+- Part 2: θ(n^2)
+
+Benchmarks
+- Part 1: **1015.962124ms**
+- Part 2: **2742.733002ms**
+
 

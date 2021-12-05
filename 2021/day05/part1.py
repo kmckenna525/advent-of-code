@@ -11,6 +11,8 @@ class VentLine:
 		self.y1 = start[1]
 		self.y2 = end[1]
 
+		self.points_set = set(self.points)
+
 	@property
 	def start(self):
 		return (self.x1, self.y1)
@@ -61,10 +63,9 @@ class VentLine:
 			for x in range(self.xmin, self.xmax + 1): #inclusive
 				yield (x, y1 + int((x - x1) * slope))
 
-
 	def intersections(self, other):
-		other_points = set(other.points)
-		for point in self.points:
+		other_points = other.points_set
+		for point in self.points_set:
 			if point in other_points:
 				yield point
 
