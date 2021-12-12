@@ -1,28 +1,29 @@
 from timeit import default_timer as timer
 import re
-
-class Node:
-	def __init__(self, val):
-		self.val = val
-		self.children = set()
-
-	def __str__(self):
-		return  "%d" % (self.val)
-
-	def __repr__(self):
-		return str(self.val)
+import math
 
 start = timer()
 file = open('input.txt')
 
-pattern = r"(?P<group>\w+)";
-result = 0
-for line in file.readlines():
-	matches = re.match(pattern, line)
-	data = matches.groupdict();
-	group = data["group"]
-	
-	result += 1
+target = int(file.read().strip())
+multiplier = 11
+maxval = (target/multiplier)
+maxdeliveries = 50
+houses = [0] * maxval
+
+for elfnum in range(1, maxval):
+	for i in range(0, maxdeliveries):
+		housenum = elfnum * (i + 1)
+		if housenum > maxval:
+			break
+		houses[housenum] += elfnum * multiplier
+
+result = -1
+for i in range(1,maxval):
+	# print "House %d got %d presents." % (i, houses[i])
+	if houses[i] >= target:
+		result = i
+		break
 
 print("Completed in %fms" % ((timer() - start) * 1000))
 print("%d is the result" % result)
