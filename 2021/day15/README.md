@@ -2,6 +2,7 @@
 
 Part 1: return of the coords! okay yeah this is same as 2015 22 but the graph is this map
 Part 2: Took 44sec, A* instead would make this reasonable?? Nah it didn't work out :(
+It's really hard to come up with an admissable heuristic
 
 
 General Time Estimate
