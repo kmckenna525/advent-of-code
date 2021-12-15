@@ -4,14 +4,16 @@ Part 1: return of the coords! okay yeah this is same as 2015 22 but the graph is
 Part 2: Took 44sec, A* instead would make this reasonable?? Nah it didn't work out :(
 It's really hard to come up with an admissable heuristic
 
+Well apparently manhattan distance works fine. idk why I bothered with the other heuristic iterations ugh
+
 
 General Time Estimate
 - Part 1: θ(E + V log V) (Dijkstra) 
 - Part 2: θ(E + V log V) (Dijkstra) 
 
 Benchmarks
-- Part 1: **833.487034ms**
-- Part 2: **44473.677158ms**
+- Part 1: **833.487034ms**; A* is **487.225056ms**
+- Part 2: **44473.677158ms**; A* is 1/4 the time **10312.047005ms**
 
 
 
