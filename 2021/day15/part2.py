@@ -174,25 +174,6 @@ class Coord:
 		yield Coord(self.row, self.col+1)
 		yield Coord(self.row, self.col-1)
 
-memo = {}
-def heuristic(riskmap, coord, target):
-	# calculate diagonal path cost
-	if coord in memo:
-		return memo[coord]
-
-	if coord == target:
-		return 0
-
-	total_risk = float("inf")
-	if riskmap.is_valid(coord.right):
-		total_risk = riskmap[coord.right] + heuristic(riskmap, coord.right, target)
-
-	if riskmap.is_valid(coord.down):
-		total_risk = riskmap[coord.down] + heuristic(riskmap, coord.down, target)
-
-	memo[coord] = total_risk
-	return total_risk
-
 		
 riskmap = Map2D(5)
 row = 0
@@ -204,43 +185,28 @@ for line in file.readlines():
 	row += 1
 # riskmap.debug()
 
-parent = {} # coord: best parent
-opencoords = {} # coord: fscore if currently in queue
-opencoords[Coord(0,0)] = 0
-unseen = PriorityQueue() # (fscore, coord)
-unseen.put((0, Coord(0,0))) 
-gscore = DefaultValueMap(float("inf"))
-gscore[Coord(0,0)] = 0
-
+seen = {} # coord: (distance, path)
+unseen = PriorityQueue() # (distance, path, coord)
+unseen.put((0, [Coord(0,0)])) 
 target = Coord(riskmap.virtual_height - 1, riskmap.virtual_width - 1)
 result = float("inf")
 while not unseen.empty():
-	fscore, coord = unseen.get()
-	if coord not in opencoords: # we probably found a better path
+	dist, path = unseen.get()
+	coord = path[-1]
+	if coord == target and dist < result:
+		result = dist
+		break
+
+	if coord in seen and seen[coord][0] <= dist:
+		# coord has already existed at a lower or equal cost
 		continue
-	if coord == target:
-		final = gscore[coord]
-		memo.clear()
-		while coord is not None:
-			memo[coord] = final - gscore[coord]
-			coord = parent[coord] if coord in parent else None
-		continue
-	opencoords.pop(coord)
+
+	seen[coord] = (dist, path)
 
 	for neighbor in riskmap.valid_neighbors(coord):
-		neighbor_gscore = gscore[coord] + riskmap[neighbor]
-		if neighbor_gscore < gscore[neighbor]:
-			parent[neighbor] = coord
-			gscore[neighbor] = neighbor_gscore
-			neighbor_fscore = neighbor_gscore + heuristic(riskmap, neighbor, target)
-			opencoords[neighbor] = neighbor_fscore
-			unseen.put((neighbor_fscore, neighbor))
-result = gscore[target]
-
-# coord = target
-# while coord is not None:
-# 	print coord, riskmap[coord]
-# 	coord = parent[coord] if coord in parent else None
+		nextlist = list(path)
+		nextlist.append(neighbor)
+		unseen.put((dist + riskmap[neighbor], nextlist))
 
 
 print("Completed in %fms" % ((timer() - start) * 1000))
