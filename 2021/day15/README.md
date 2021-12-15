@@ -5,6 +5,8 @@ Part 2: Took 44sec, A* instead would make this reasonable?? Nah it didn't work o
 It's really hard to come up with an admissable heuristic
 
 Well apparently manhattan distance works fine. idk why I bothered with the other heuristic iterations ugh
+It's probably because we need to consider the best case scenario and THEN leave it to be proven wrong to actually get the optimal path
+Otherwise the optimal path might look really bad 
 
 
 General Time Estimate
