@@ -12,6 +12,22 @@ class Node:
 	def __repr__(self):
 		return str(self.val)
 
+	def __hash__(self):
+		 return hash((self.val))
+
+	def __eq__(self, other):
+		return (
+			self.__class__ == other.__class__ and
+			self.val == other.val)
+
+
+	def __getitem__(self, key):
+		return None
+
+
+	def __setitem__(self, key, value):
+		return 
+
 start = timer()
 file = open('input.txt')
 

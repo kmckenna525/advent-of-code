@@ -5,15 +5,17 @@ yeah brute forced for the most part but optimized with an early out (saved 30 ms
 
 Part 2: That's a dang dong binomial coefficient, bro
 
-General Time Estimate
+#### General Time Estimate
 - Part 1: θ(n^2) 
 - Part 2: θ(n^2)
 
-Benchmarks
+#### Benchmarks
 - Part 1: **89.941025ms**
 - Part 2: **134.545088ms**
 
 
 
-Stats
+#### Stats
+```
   7   00:12:53  5775      0   00:17:23  4370      0
+```

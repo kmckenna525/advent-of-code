@@ -8,15 +8,17 @@ Part 2: well, that doesn't work very quickly... So immediately I see that it's a
 
 Memo did the trick!
 
-General Time Estimate
+#### General Time Estimate
 - Part 1: ?? I don't want to do time analysis todayyyyyy
 - Part 2: ?? 
 
-Benchmarks
+#### Benchmarks
 - Part 1: **7.968903ms**; **3.604889ms** after part 2!
 - Part 2: **19.793987ms**
 
 
 
-Stats
+#### Stats
+```
  14   00:20:47  3478      0   01:11:04  3509      0
+```

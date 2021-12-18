@@ -6,15 +6,17 @@ Part 1 was easy at least! just loop through and count shit
 Part 2 took a while to debug - I just kept screwing up python class syntax (forgetting self)
 I also ran into a speed bump when I found out the hard way that the signals are not ordered consistently
 
-General Time Estimate
+#### General Time Estimate
 - Part 1: θ(n) 
 - Part 2: θ(n) - does up to 2 passes per set of input on the numbers (skips known), but still only grows linearly with number of lines
 
-Benchmarks
+#### Benchmarks
 - Part 1: **0.566006ms**
 - Part 2: **8.327007ms**
 
 
 
-Stats
+#### Stats
+```
   8   00:17:25  4872      0   01:05:37  2468      0
+```
