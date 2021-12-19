@@ -145,19 +145,41 @@ class Region:
 		for scanner in self.scanners[1:]: # all but basis
 			if self.basis not in self.overlaps[scanner]:
 				print scanner.id, self.overlaps[scanner].keys()
+				found = False
+				for other, (stoo, otos) in self.overlaps[scanner].items():
+					print "  CHECK", other.id, self.overlaps[other].keys()
+					if other in self.overlaps[self.basis]:
+						btoo, otob = self.overlaps[self.basis][other]
+						self.spread_overlaps_specific(other, self.basis, otob, btoo, scanner, otos, stoo)
+						found = True
+				if not found:
+					print "FOUND NOTHING"
 			self.add_points(scanner)
+
+
+
+	def spread_overlaps_specific(self, a, b, atob, btoa, other, atoother, othertoa):
+		othertob = ctoa(othertoa, atob)
+		btoother = ctoa(btoa, atoother)
+		self.overlaps[other][b] = (othertob, btoother)
+		self.overlaps[b][other] = (btoother, othertob)
 
 
 
 	def spread_overlaps(self, a, b, atob, btoa):
 		for other, (atoother, othertoa) in self.overlaps[a].items():
+			if b == other:
+				continue
 			# only if basis is not yet in there and b not already in there, if basis there we are good
 			if b not in self.overlaps[other] and self.basis not in self.overlaps[other]:
 				othertob = ctoa(othertoa, atob)
 				btoother = ctoa(btoa, atoother)
 				self.overlaps[other][b] = (othertob, btoother)
 				self.overlaps[b][other] = (btoother, othertob)
+				self.spread_overlaps(other, b, othertob, btoother)
 		for other, (btoother, othertob) in self.overlaps[b].items():
+			if a == other:
+				continue
 			# only if basis is not yet in there and a not already in there, if basis there we are good
 			if a not in self.overlaps[other] and self.basis not in self.overlaps[other]:
 				# print "  ANOTHER", other.id, othertob, btoa
@@ -167,6 +189,7 @@ class Region:
 				# testctoa(atob, btoother, a.detected[0].position)
 				self.overlaps[other][a] = (othertoa, atoother)
 				self.overlaps[a][other] = (atoother, othertoa)
+				self.spread_overlaps(other, a, othertoa, atoother)
 				# for beacon in other.detected:
 				# 	print "    NEWERER", beacon.position.apply_map(othertoa) 
 
@@ -188,10 +211,11 @@ class Scanner:
 		self.detected = []
 
 	def __str__(self):
-		return  "%d: %s" % (self.id, str(self.detected))
+		return  "%d" % (self.id)
 
 	def __repr__(self):
-		return  "%d: %s" % (self.id, str(self.detected))
+		return str(self)
+		# return  "%d: %s" % (self.id, str(self.detected))
 
 	def add(self, beacon):
 		self.detected.append(beacon)

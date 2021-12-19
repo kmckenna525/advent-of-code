@@ -6,6 +6,7 @@ Doing this one in python like last year just for speed and familiarity. Maybe ne
 ```
       -------Part 1--------   -------Part 2--------
 Day       Time  Rank  Score       Time  Rank  Score
+ 19   05:27:01  2401      0   05:39:53  2274      0
  18   02:04:23  1624      0   02:17:30  1670      0
  17   01:38:59  5461      0   01:45:24  4693      0
  16   03:07:30  5709      0   03:18:14  4853      0
