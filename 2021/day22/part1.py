@@ -9,88 +9,43 @@ Instruction = namedtuple('Instruction', ['on', 'cuboid'])
 Coord = namedtuple('Coord', ['x','y','z'])
 Range = namedtuple('Range', ['min','max'])
 
-class Map2D:
-	def __init__(self, defaultval = False):
-		self.map = {}
-		self.xrange = Range(0,0) 
-		self.yrange = Range(0,0) 
-		self.zrange = Range(0,0) 
-		self.defaultval = defaultval
+def make_cuboid(xmin, xmax, ymin, ymax, zmin, zmax):
+	return Coord(Range(xmin, xmax), Range(ymin, ymax), Range(zmin, zmax))
+
+def does_intersect(a, b):
+	if a.x.min > b.x.max or a.x.max < b.x.min:
+		return False
+	if a.y.min > b.y.max or a.y.max < b.y.min:
+		return False
+	if a.z.min > b.z.max or a.z.max < b.z.min:
+		return False
+	return True
+
+def intersect_possibilities(a, b):
+	possibilities = []
+
+	# just slice them cubes up into littler cubes at the intersections
+	if a.x.min > b.x.min:
+		possibilities.append(make_cuboid(b.x.min, a.x.min - 1, b.y.min, b.y.max, b.z.min, b.z.max))
+	if a.x.max < b.x.max:
+		possibilities.append(make_cuboid(a.x.max + 1, b.x.max, b.y.min, b.y.max, b.z.min, b.z.max))
+	if a.y.min > b.y.min:
+		possibilities.append(make_cuboid(max(b.x.min, a.x.min), min(b.x.max, a.x.max), b.y.min, a.y.min - 1, b.z.min, b.z.max))
+	if a.y.max < b.y.max:
+		possibilities.append(make_cuboid(max(b.x.min, a.x.min), min(b.x.max, a.x.max), a.y.max + 1, b.y.max, b.z.min, b.z.max))
+	if a.z.min > b.z.min:
+		possibilities.append(make_cuboid(max(b.x.min, a.x.min), min(b.x.max, a.x.max), max(b.y.min, a.y.min), min(b.y.max, a.y.max), b.z.min, a.z.min - 1))
+	if a.z.max < b.z.max:
+		possibilities.append(make_cuboid(max(b.x.min, a.x.min), min(b.x.max, a.x.max), max(b.y.min, a.y.min), min(b.y.max, a.y.max), a.z.max + 1, b.z.max))
+
+	return possibilities
 
 
-	def __str__(self):
-		return str(self.map)
-
-
-	def __repr__(self):
-		return str(self.map)
-
-
-	def __getitem__(self, coord):
-		if not self.is_valid(coord):
-			return self.defaultval
-		return self.map[coord] if coord in self.map else False
-
-
-	def __setitem__(self, coord, value):
-		self.add_coord(coord, value)
-
-
-	@property
-	def coords(self):
-		for i in range(self.xrange.min, self.xrange.max):
-			for j in range(self.yrange.min, self.yrange.max):
-				for k in range(self.zrange.min, self.zrange.max):
-					yield Coord(i,j,k)
-
-
-	def add_coord(self, coord, value):
-		self.map[coord] = value
-		if coord.x >= self.xrange.max:
-			self.xrange = Range(self.xrange.min, coord.x + 1)
-		if coord.x < self.xrange.min:
-			self.xrange = Range(coord.x, self.xrange.max)
-		if coord.y >= self.yrange.max:
-			self.yrange = Range(self.yrange.min,  coord.y + 1)
-		if coord.y < self.yrange.min:
-			self.yrange = Range(coord.y, self.yrange.max)
-		if coord.z >= self.zrange.max:
-			self.zrange = Range(self.zrange.min,  coord.z + 1)
-		if coord.z < self.zrange.min:
-			self.zrange = Range(coord.z, self.zrange.max)
-
-
-	def is_valid(self, coord):
-		return (
-			coord.x >= self.xrange.min and 
-			coord.x < self.xrange.max and
-			coord.y >= self.yrange.min and 
-			coord.y < self.yrange.max and
-			coord.z >= self.zrange.min and 
-			coord.z < self.zrange.max)
-
-
-	def valid_neighbors(self, coord): 
-		for neighbor in coord.neighbors:
-			if self.is_valid(neighbor):
-				yield neighbor
-
-
-	def debug(self):
-		for i in range(self.xrange.min, self.xrange.max):
-			s = ""
-			for j in range(self.yrange.min, self.yrange.max):
-				s += str(self[Coord(i,j)])
-			print s
-		print ""
-
-
-	def count(self, target):
-		total = 0
-		for coord in self.coords:
-			if self[coord] == target:
-				total += 1
-		return total
+def volume(cuboid):
+	return (
+		(cuboid.x.max - cuboid.x.min + 1) * 
+		(cuboid.y.max - cuboid.y.min + 1) * 
+		(cuboid.z.max - cuboid.z.min + 1))
 
 
 def is_within_range(coordrange):
@@ -106,14 +61,6 @@ def is_within_region(instruction):
 		is_within_range(instruction.cuboid.z))
 
 
-def execute(instruction, fullmap):
-	for x in range(instruction.cuboid.x.min, instruction.cuboid.x.max + 1): 
-		for y in range(instruction.cuboid.y.min, instruction.cuboid.y.max + 1): 
-			for z in range(instruction.cuboid.z.min, instruction.cuboid.z.max + 1): 
-				coord = Coord(x,y,z)
-				fullmap[coord] = instruction.on
-
-
 pattern = r"(?P<on>on|off) x=(?P<xmin>.+)\.\.(?P<xmax>.+),y=(?P<ymin>.+)\.\.(?P<ymax>.+),z=(?P<zmin>.+)\.\.(?P<zmax>.+)"
 ranges = []
 for line in file.readlines():
@@ -127,16 +74,33 @@ for line in file.readlines():
 	zmin = int(data["zmin"])
 	zmax = int(data["zmax"])
 
-	ranges.append(Instruction(on, Coord(Range(xmin, xmax), Range(ymin, ymax), Range(zmin, zmax))))
+	ranges.append(Instruction(on, make_cuboid(xmin, xmax, ymin, ymax, zmin, zmax)))
 
 
-fullmap = Map2D()
+oncubes = []
 for instr in ranges:
-	if is_within_region(instr):
-		execute(instr, fullmap)
+	if not is_within_region(instr):
+		continue
+	for i in range(len(oncubes)):
+		cuboid = oncubes[i]
+		if not does_intersect(instr.cuboid, cuboid):
+			continue
+		oncubes[i] = None
+		possibilities = intersect_possibilities(instr.cuboid, cuboid)
+		oncubes += possibilities
 
+	if instr.on:
+		oncubes.append(instr.cuboid)
+		# (xmin, xmax), (ymin, ymax), (zmin, zmax) = instr.cuboid
+		# oncubes.append(make_cuboid(min(xmin, xmax), max(xmin, xmax), min(ymin, ymax), max(ymin, ymax), min(zmin, zmax), max(zmin, zmax)))
 
-result = fullmap.count(True)
+	for i in list(reversed(range(len(oncubes)))):
+		if oncubes[i] is None:
+			oncubes.pop(i)
+
+result = 0
+for cuboid in oncubes:
+	result += volume(cuboid)
 
 
 print("Completed in %fms" % ((timer() - start) * 1000))
