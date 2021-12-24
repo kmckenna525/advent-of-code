@@ -1,0 +1,266 @@
+inp w
+#mul x 0 # x is 0??
+#add x z # x and z are 0
+#mod x 26 # also 0
+#div z 1 # division by 1 does nothing
+#add x 13 # x = 13
+#eql x w # 1 if first digit is 13 (never)
+#eql x 0 # 1 if first digit is not 13 (always - 0-9 only)
+add x 1 # inserted instead ^, x = 1
+#mul y 0 # y is already 0
+#add y 25 # y = 25 
+#mul y x # x is 1, so nothing
+#add y 1 # y = 26
+#mul z y # nothing, z is 0
+#mul y 0 # y = 0
+add y w # y = input[0]
+add y 6 # y += 6
+mul y x # y += 1, input[0] + 6!!!
+add z y # z = y, input[0] + 6
+
+inp w # input[1]
+#mul x 0 # x = 0 - change to not happpen since x is just gonna end up 1
+#add x z # x = input[0] + 6
+#mod x 26 # x %= 26 < does nothing, max is 16
+#div z 1 # nothing
+#add x 15 # x = input[0] + 6 + 15, input[0] + 22
+#eql x w # impossible, max 9 while x is min 22, x = 0
+#eql x 0 # always, x = 1
+mul y 0 # y = 0
+add y 25 # y = 25
+#mul y x # nothing, x is 1
+add y 1 # y = 26
+mul z y # z = (input[0] + 6) * 26
+mul y 0 # y = 0 
+add y w # y = input[1]
+add y 7 # y = input[1] + 7
+#mul y x # nothing, x is 1
+add z y # z = ((input[0] + 6) * 26) + input[1] + 7
+
+inp w # input[2]
+#mul x 0 # x = 0
+#add x z # x = ((input[0] + 6) * 26) + input[1] + 7
+#mod x 26 # x %= 26, so (input[1] + 7)
+#div z 1 # div by 1 does nothing
+#add x 15 # x = (input[1] + 7) + 15, (input[1] + 22)
+#eql x w # (input[1] + 22) == input[2] never
+#eql x 0 # (input[1] + 22) != input[2] always, so x is still 1
+mul y 0 # y = 0
+add y 25 # y = 25
+#mul y x # x always 1 so nothing 
+add y 1 # y = 26
+mul z y # z = (((input[0] + 6) * 26) + input[1] + 7) * 26
+mul y 0 # y = 0
+add y w # y = input[2]
+add y 10 # y = input[2] + 10
+#mul y x # x is 1, so nothing
+add z y # z = ((((input[0] + 6) * 26) + input[1] + 7) * 26) + input[2] + 10
+
+inp w # input[3]
+#mul x 0 # x = 0
+#add x z # x = z ^
+#mod x 26 # remove those 26s, x = input[2] + 10
+#div z 1 # nothing??
+#add x 11 # x = input[2] + 21
+#eql x w # x will never be w, w is max 9 and x is min 21
+#eql x 0 # x is always 1
+mul y 0 # y = 0
+add y 25 # y = 25
+#mul y x # x is 1, so nothin
+add y 1 # y = 26
+mul z y # z = (((((input[0] + 6) * 26) + input[1] + 7) * 26) + input[2] + 10) * 26
+mul y 0 # y = 0
+add y w # y = input[3]
+add y 2 # y = input[3] + 2
+#mul y x # x is 1, so this be nathin
+add z y # z = ((((((input[0] + 6) * 26) + input[1] + 7) * 26) + input[2] + 10) * 26) + input[3] + 2
+
+inp w # input[4]
+mul x 0 # x = 0
+add x z # x = ^
+mod x 26 # x = input[3] + 2
+div z 26 # z = ((((input[0] + 6) * 26) + input[1] + 7) * 26) + input[2] + 10 (drops input[3])
+add x -7 # x = input[3] - 5
+eql x w # if input[3] - 5 == input[4]
+eql x 0 # if input[3] - 5 != input[4]
+mul y 0 # y = 0
+add y 25 # y = 25
+mul y x # y = 25 if input[3] - 5 != input[4], else y = 0 
+add y 1 # y = 26 if input[3] - 5 != input[4], else y = 1
+mul z y # z = (((((input[0] + 6) * 26) + input[1] + 7) * 26) + input[2] + 10) * 26 if input[3] - 5 != input[4] else no multiply
+mul y 0 # y = 0
+add y w # y = input[4]
+add y 15 # y = input[4] + 15
+mul y x # y = input[4] if input[3] - 5 != input[4], else y = 0 
+add z y # z = [input[0] + 6, input[1] + 7, input[2] + 10, input[4] + 15] or [input[0] + 6, input[1] + 7, input[2] + 10] (I think right side gets us closer to 0)
+
+inp w # input[5]
+mul x 0 # x = 0
+#add x z # x = ^
+#mod x 26 # pop x = input[4] + 15 or input[2] + 10
+#div z 1 # nathin, this will be another push prob
+#add x 10 # 25 or 20
+#eql x w # no way, always 0 so leave at 0
+eql x 0 # x = 1
+mul y 0 # y = 0
+add y 25
+# mul y x
+add y 1 # y = 26
+mul z y # z * 26 to push
+mul y 0 # y = 0
+add y w
+add y 8
+#mul y x # x always 1
+add z y # [input[0] + 6, input[1] + 7, input[2] + 10, input[5] + 8]
+
+inp w # input[6]
+#mul x 0 # leave x as 1
+#add x z
+#mod x 26 # x = input[5] + 8
+#div z 1 # prob pushing more
+#add x 10 # 18
+#eql x w
+#eql x 0 # x = 1
+mul y 0 # y = 0
+add y 25
+#mul y x # always 1
+add y 1 # y = 26
+mul z y # push back
+mul y 0 # y = 0
+add y w 
+add y 1
+#mul y x # always 1
+add z y # [input[0] + 6, input[1] + 7, input[2] + 10, input[5] + 8, input[6] + 1]
+
+inp w # input[7]
+mul x 0 
+add x z 
+mod x 26 # x = input[6] + 1
+div z 26 # look like a pop, z = [input[0] + 6, input[1] + 7, input[2] + 10, input[5] + 8]
+add x -5 # x = input[6] - 4
+eql x w # input[6] - 4 == input[7]
+eql x 0
+mul y 0 
+add y 25
+mul y x
+add y 1 # x = 0, sp y = 1 
+mul z y # does nothing in good case
+mul y 0 # y = 0
+add y w
+add y 10
+mul y x
+add z y # z = [input[0] + 6, input[1] + 7, input[2] + 10, input[5] + 8]
+
+inp w # input[8]
+mul x 0
+#add x z
+#mod x 26
+#div z 1 # push
+#add x 15
+#eql x w
+eql x 0
+mul y 0
+add y 25
+#mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 5
+#mul y x
+add z y # z = [input[0] + 6, input[1] + 7, input[2] + 10, input[5] + 8, input[8] + 5]
+
+inp w # input[9]
+mul x 0
+add x z
+mod x 26 # x = input[8] + 5
+div z 26 # gon pop [input[0] + 6, input[1] + 7, input[2] + 10, input[5] + 8]
+add x -3 # x = input[8] + 2
+eql x w # input[8] + 2 == input[9]
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 3
+mul y x # x should be 0, so nvm 
+add z y # z = [input[0] + 6, input[1] + 7, input[2] + 10, input[5] + 8]
+
+inp w # input[10]
+mul x 0
+add x z
+mod x 26 # x = input[5] + 8
+div z 26 # pop [input[0] + 6, input[1] + 7, input[2] + 10]
+#add x 0 # uh nothing
+eql x w # input[5] + 8 == input[10]
+eql x 0
+mul y 0
+add y 25 
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 5
+mul y x
+add z y # z = [input[0] + 6, input[1] + 7, input[2] + 10]
+
+inp w # input[11]
+mul x 0
+add x z
+mod x 26 # x = input[2] + 10
+div z 26 # poppin [input[0] + 6, input[1] + 7]
+add x -5 # x = input[2] + 5
+eql x w # input[2] + 5 == input[11]
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+add z y # [input[0] + 6, input[1] + 7]
+
+inp w # input[12]
+mul x 0
+add x z
+mod x 26
+div z 26 #pop
+add x -9 # input[1] - 2
+eql x w  # input[1] - 2 == input[12]
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+add z y
+
+inp w # input[13]
+mul x 0
+add x z
+mod x 26 # input[0] + 6
+div z 26 #pop
+#add x 0 # nada
+eql x w # input[0] + 6 == input[13]
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 10
+mul y x
+add z y
