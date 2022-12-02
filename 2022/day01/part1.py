@@ -1,10 +1,8 @@
 from timeit import default_timer as timer
-import re
 
 start = timer()
 file = open('input.txt')
 
-pattern = r"(?P<group>\w+)";
 elves = [0]
 elfIndex = 0
 result = 0
@@ -19,7 +17,7 @@ for line in file.readlines():
 		continue
 
 	elves[elfIndex] += int(line)
-	
+
 if elves[elfIndex] > result:
 	result = elves[elfIndex]
 
