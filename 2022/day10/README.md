@@ -1,6 +1,6 @@
 # 2022 Day 10
 
-Part 1: I misread it and thought the ops stacked :'(
+Part 1: I misread it and thought the ops stacked instead of waiting for each other :'(
 
 Part 2: Forgot that multiplying an array repeats the instances inside it when initializing - took a bit to debug that
 
