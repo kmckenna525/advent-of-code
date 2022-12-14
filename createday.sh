@@ -17,7 +17,7 @@ fi
 year=$1
 day=$2
 if [ -z $2 ]; then
-	year=2021
+	year=2022
 	day=$1
 fi
 
